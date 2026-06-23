@@ -153,24 +153,26 @@ jobs:
 
       # ==========================================================
       # 🔍 TAHAP ANALYZE — STEP 2: Stop workflow jika only_analyze
-      # (Dipisah biar log step di atas sudah ter-commit ke GitHub)
+      # DIPERBAIKI: Gunakan success() atau skip pakai if condition
       # ==========================================================
       - name: Stop if Analyze Only
         if: ${{ github.event.inputs.only_analyze == 'true' }}
         run: |
-          echo "Analyze-only mode aktif. Workflow dihentikan di sini."
-          exit 1
+          echo "✅ Analyze-only mode aktif. Workflow selesai dengan sukses."
+          exit 0
 
       # =========================
       # FLUTTER DOCTOR
       # =========================
       - name: Flutter Doctor
+        if: ${{ github.event.inputs.only_analyze != 'true' }}
         run: flutter doctor
 
       # ==========================================================
       # 📦 TAHAP DOWNLOAD DEPENDENSI (PUB GET)
       # ==========================================================
       - name: Get dependencies
+        if: ${{ github.event.inputs.only_analyze != 'true' }}
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
           echo "=== Running flutter pub get ==="
@@ -184,6 +186,7 @@ jobs:
       # 🚀 TAHAP PEMBAKARAN UTAMA (BUILD APK)
       # ==========================================================
       - name: Build APK
+        if: ${{ github.event.inputs.only_analyze != 'true' }}
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
           echo "=== Building APK ==="
@@ -220,6 +223,7 @@ jobs:
       # CHECK APK
       # =========================
       - name: Check APK Output
+        if: ${{ github.event.inputs.only_analyze != 'true' }}
         run: |
           echo "=== APK Output Scanning (Global Mode) ==="
 
@@ -233,12 +237,8 @@ jobs:
             exit 1
           fi
 
-          APK_PATH=$(echo "$APK_FOUND" | sed "s|$GITHUB_WORKSPACE/||")
-
-          echo "✅ APK Sukses Ditemukan di Jalur: $APK_PATH"
-          
-          echo "PROJECT_DIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
+          echo "✅ APK Sukses Ditemukan di: $APK_FOUND"
+          echo "APK_PATH=$APK_FOUND" >> $GITHUB_ENV
 
           echo ""
           echo "=== APK Size ==="
@@ -248,9 +248,11 @@ jobs:
       # UPLOAD APK
       # =========================
       - name: Upload APK artifact
+        if: ${{ github.event.inputs.only_analyze != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: flutter-${{ github.event.inputs.build_type }}-${{ github.event.inputs.tag }}
-          path: ${{ env.PROJECT_DIR }}/${{ env.APK_PATH }}
+          path: ${{ env.APK_PATH }}
           retention-days: 1
           if-no-files-found: error
+          
