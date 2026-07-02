@@ -1,0 +1,12 @@
+{
+  "mr3w3l3ohjl8": {
+    "job_id": "mr3w3l3ohjl8",
+    "release_id": 348245663,
+    "release_tag": "build-mr3w3l3ohjl8",
+    "run_id": 28615768983,
+    "user_id": 8349255189,
+    "created_at": "2026-07-02T19:21:02.657Z",
+    "build_type": "release",
+    "only_analyze": "false"
+  }
+}
