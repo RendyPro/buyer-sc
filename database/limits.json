@@ -33,7 +33,7 @@
       "renameall": 1
     },
     "8668407449": {
-      "renameall": 2
+      "renameall": 3
     },
     "7463997802": {
       "renameapp": 1
@@ -51,6 +51,9 @@
       "functions": 1
     },
     "8496303422": {
+      "rename": 2
+    },
+    "8402018672": {
       "rename": 1
     }
   }
