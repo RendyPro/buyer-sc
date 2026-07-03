@@ -828,5 +828,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1911
+  },
+  "mr5bbojjoxud": {
+    "job_id": "mr5bbojjoxud",
+    "release_id": 348764700,
+    "release_tag": "build-mr5bbojjoxud",
+    "run_id": 28679319846,
+    "user_id": 1477055007,
+    "created_at": "2026-07-03T19:14:57.523Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@BackupGilz2",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1912
   }
 }
