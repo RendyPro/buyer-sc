@@ -12,7 +12,8 @@
       "renameall": 1,
       "gantiicon": 1,
       "rename": 1,
-      "jshtml": 1
+      "jshtml": 1,
+      "functions": 1
     }
   }
 }
