@@ -843,5 +843,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1912
+  },
+  "mr5c86dji2bd": {
+    "job_id": "mr5c86dji2bd",
+    "release_id": 348771728,
+    "release_tag": "build-mr5c86dji2bd",
+    "run_id": 28680273346,
+    "user_id": 8496303422,
+    "created_at": "2026-07-03T19:40:17.478Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@Ryu11q",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1913
   }
 }
