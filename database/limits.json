@@ -10,7 +10,9 @@
     },
     "8658608584": {
       "renameall": 1,
-      "gantiicon": 1
+      "gantiicon": 1,
+      "rename": 1,
+      "jshtml": 1
     }
   }
 }
