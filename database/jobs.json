@@ -1548,5 +1548,35 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1967
+  },
+  "mr6ho094mtbh": {
+    "job_id": "mr6ho094mtbh",
+    "release_id": 348973647,
+    "release_tag": "build-mr6ho094mtbh",
+    "run_id": 28710084052,
+    "user_id": 5871379389,
+    "created_at": "2026-07-04T15:00:18.584Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@MayzzX",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1968
+  },
+  "mr6hzk7sp092": {
+    "job_id": "mr6hzk7sp092",
+    "release_id": 348975282,
+    "release_tag": "build-mr6hzk7sp092",
+    "run_id": 28710322807,
+    "user_id": 1166963113,
+    "created_at": "2026-07-04T15:09:10.774Z",
+    "build_type": "debug",
+    "only_analyze": "false",
+    "dev_name": "𝗗𝗢𝗫𝗭 𝗢𝗡 𖤍",
+    "project_name": "ZIP Upload",
+    "mode_label": "🐛 Debug Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1969
   }
 }
