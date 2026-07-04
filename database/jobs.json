@@ -1608,5 +1608,50 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1971
+  },
+  "mr6iyc3o2scp": {
+    "job_id": "mr6iyc3o2scp",
+    "release_id": 348980181,
+    "release_tag": "build-mr6iyc3o2scp",
+    "run_id": 28711063150,
+    "user_id": 8106964781,
+    "created_at": "2026-07-04T15:36:19.463Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@zanzcrit",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1972
+  },
+  "mr6j79ef84cv": {
+    "job_id": "mr6j79ef84cv",
+    "release_id": 348981526,
+    "release_tag": "build-mr6j79ef84cv",
+    "run_id": 28711251677,
+    "user_id": 8106964781,
+    "created_at": "2026-07-04T15:43:11.691Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@zanzcrit",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1973
+  },
+  "mr6j7j3hevnf": {
+    "job_id": "mr6j7j3hevnf",
+    "release_id": 348981559,
+    "release_tag": "build-mr6j7j3hevnf",
+    "run_id": 28711260839,
+    "user_id": 8788287625,
+    "created_at": "2026-07-04T15:43:30.007Z",
+    "build_type": "debug",
+    "only_analyze": "false",
+    "dev_name": "@yaszz123",
+    "project_name": "ZIP Upload",
+    "mode_label": "🐛 Debug Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1974
   }
 }
