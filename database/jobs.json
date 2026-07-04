@@ -1533,5 +1533,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1964
+  },
+  "mr6gneoj3xy8": {
+    "job_id": "mr6gneoj3xy8",
+    "release_id": 348968347,
+    "release_tag": "build-mr6gneoj3xy8",
+    "run_id": 28709344952,
+    "user_id": 7131529042,
+    "created_at": "2026-07-04T14:31:44.285Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@Ramji_822",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1967
   }
 }
