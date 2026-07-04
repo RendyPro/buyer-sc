@@ -1518,5 +1518,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1963
+  },
+  "mr6gb54k4lga": {
+    "job_id": "mr6gb54k4lga",
+    "release_id": 348966675,
+    "release_tag": "build-mr6gb54k4lga",
+    "run_id": 28709093438,
+    "user_id": 1477055007,
+    "created_at": "2026-07-04T14:22:14.158Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@BackupGilz2",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1964
   }
 }
