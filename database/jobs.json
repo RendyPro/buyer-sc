@@ -58,5 +58,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1991
+  },
+  "mr7xusxwqecb": {
+    "job_id": "mr7xusxwqecb",
+    "release_id": 349189473,
+    "release_tag": "build-mr7xusxwqecb",
+    "run_id": 28745470774,
+    "user_id": 8727789465,
+    "created_at": "2026-07-05T15:21:21.541Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@Tuan_Xavier",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1992
   }
 }
