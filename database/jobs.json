@@ -73,5 +73,35 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 1992
+  },
+  "mr7xz2dkj6qs": {
+    "job_id": "mr7xz2dkj6qs",
+    "release_id": 349190007,
+    "release_tag": "build-mr7xz2dkj6qs",
+    "run_id": 28745554668,
+    "user_id": 1940337435,
+    "created_at": "2026-07-05T15:24:27.657Z",
+    "build_type": "debug",
+    "only_analyze": "false",
+    "dev_name": "@OfficiaI_CoinMarketCap_Service42",
+    "project_name": "ZIP Upload",
+    "mode_label": "🐛 Debug Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1993
+  },
+  "mr7y2596gg3v": {
+    "job_id": "mr7y2596gg3v",
+    "release_id": 349190409,
+    "release_tag": "build-mr7y2596gg3v",
+    "run_id": 28745621247,
+    "user_id": 1940337435,
+    "created_at": "2026-07-05T15:26:51.382Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@OfficiaI_CoinMarketCap_Service42",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 1994
   }
 }
