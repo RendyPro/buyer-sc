@@ -313,5 +313,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 2017
+  },
+  "mr99x02y9tcc": {
+    "job_id": "mr99x02y9tcc",
+    "release_id": 349585336,
+    "release_tag": "build-mr99x02y9tcc",
+    "run_id": 28796304442,
+    "user_id": 8805233982,
+    "created_at": "2026-07-06T13:46:46.498Z",
+    "build_type": "debug",
+    "only_analyze": "false",
+    "dev_name": "@ReyyNottDev",
+    "project_name": "ZIP Upload",
+    "mode_label": "🐛 Debug Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 2021
   }
 }
