@@ -268,5 +268,20 @@
     "mode_label": "📦 Release Build",
     "log_chat_id": -1004433503613,
     "log_msg_id": 2014
+  },
+  "mr96kq5r6ies": {
+    "job_id": "mr96kq5r6ies",
+    "release_id": 349531608,
+    "release_tag": "build-mr96kq5r6ies",
+    "run_id": 28790646106,
+    "user_id": 6993401394,
+    "created_at": "2026-07-06T12:13:09.656Z",
+    "build_type": "release",
+    "only_analyze": "false",
+    "dev_name": "@Nulltryhard",
+    "project_name": "ZIP Upload",
+    "mode_label": "📦 Release Build",
+    "log_chat_id": -1004433503613,
+    "log_msg_id": 2015
   }
 }
