@@ -5,26 +5,18 @@ on:
     inputs:
       zip_url:
         description: "URL download ZIP project Flutter"
-        required: false
-        type: string
-      file_id:
-        description: "Telegram file_id"
-        required: false
-        type: string
+        required: true
       tag:
         description: "Tag build"
         required: true
-        type: string
       build_type:
         description: "debug / release"
         required: true
         default: "release"
-        type: string
       only_analyze:
         description: "Hanya jalankan analyze (true/false)"
         required: false
         default: "false"
-        type: string
 
 jobs:
   build:
@@ -39,38 +31,45 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Download from file_id
-        if: ${{ github.event.inputs.file_id != '' }}
+      - name: Download ZIP project
         run: |
-          echo "=== Downloading from file_id ==="
-          echo "File ID: ${{ github.event.inputs.file_id }}"
-          FILE_PATH=$(curl -s "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/getFile?file_id=${{ github.event.inputs.file_id }}" | jq -r '.result.file_path')
-          curl -L "https://api.telegram.org/file/bot${{ secrets.BOT_TOKEN }}/$FILE_PATH" -o project.zip
-          echo "=== File Info ==="
-          ls -lh project.zip
-
-      - name: Download from zip_url
-        if: ${{ github.event.inputs.zip_url != '' }}
-        run: |
-          echo "=== Downloading from zip_url ==="
+          echo "=== Downloading ZIP ==="
           echo "URL: ${{ github.event.inputs.zip_url }}"
           curl -L \
             -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
             -H "Accept: application/octet-stream" \
             "${{ github.event.inputs.zip_url }}" \
-            -o project.zip
+            -o project.zip \
+            -w "\n=== HTTP Status: %{http_code} ===\n=== Final URL: %{url_effective} ===\n"
+          echo ""
           echo "=== File Info ==="
           ls -lh project.zip
+          echo ""
+          echo "=== File Type ==="
+          file project.zip
+          echo ""
+          echo "=== First Bytes ==="
+          xxd project.zip | head -2
 
       - name: Extract ZIP
         run: |
           echo "=== Validating ZIP ==="
           if ! unzip -t project.zip > /dev/null 2>&1; then
             echo "❌ File bukan ZIP valid!"
+            echo ""
+            echo "=== Isi file ==="
+            cat project.zip
             exit 1
           fi
           echo "✅ ZIP valid"
+          echo ""
+          echo "=== Extracting ZIP ==="
           unzip -q project.zip -d project_raw
+          echo ""
+          echo "=== Isi folder project_raw ==="
+          find project_raw | head -50
+          echo ""
+          echo "=== Mengunci Project Dir (Manut Mode) ==="
           SUB_DIR_COUNT=$(find project_raw -maxdepth 1 -mindepth 1 -type d | wc -l)
           FILE_COUNT=$(find project_raw -maxdepth 1 -mindepth 1 -type f | wc -l)
           if [ "$SUB_DIR_COUNT" -eq 1 ] && [ "$FILE_COUNT" -eq 0 ]; then
@@ -78,6 +77,7 @@ jobs:
           else
             PROJECT_DIR="project_raw"
           fi
+          echo "✅ Project root langsung dikunci di: $PROJECT_DIR"
           echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
 
       - name: Setup Java
@@ -96,6 +96,7 @@ jobs:
       - name: Setup memory 2GB for Gradle
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
+          echo "=== Setting up Gradle memory 2GB ==="
           if [ -f "android/gradle.properties" ]; then
             echo "org.gradle.jvmargs=-Xmx2048m -Xms512m -XX:MaxMetaspaceSize=512m" >> android/gradle.properties
             echo "android.enableR8=true" >> android/gradle.properties
@@ -125,12 +126,19 @@ jobs:
       - name: Analyze Project Code
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
+          echo "=== Starting Automated Code Analysis ==="
           if [ -f "pubspec.yaml" ]; then
+            echo "🔍 Menjalankan linting via flutter analyze..."
             flutter analyze > analyze_report.txt 2>&1 || true
             echo "[RESULT_ANALYZE]"
             cat analyze_report.txt
             echo "[END_RESULT_ANALYZE]"
             rm -f analyze_report.txt
+          else
+            echo "☕ Project native / gradlew terdeteksi!"
+            echo "[RESULT_ANALYZE]"
+            echo "❌ Fitur analyze hanya support project Flutter (pubspec.yaml tidak ditemukan)."
+            echo "[END_RESULT_ANALYZE]"
           fi
 
       - name: Stop if Analyze Only
@@ -145,8 +153,11 @@ jobs:
       - name: Get dependencies
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
+          echo "=== Running flutter pub get ==="
           if [ -f "pubspec.yaml" ]; then
             timeout 120s flutter pub get || echo "⚠️ Gagal download package, lanjut aja..."
+          else
+            echo "☕ Bukan project Flutter, skip pub get!"
           fi
 
       - name: Build APK
