@@ -101,6 +101,25 @@ jobs:
             echo "android.enableR8=true" >> android/gradle.properties
             echo "android.enableJetifier=true" >> android/gradle.properties
             echo "android.useAndroidX=true" >> android/gradle.properties
+            echo "✅ Gradle properties updated"
+          else
+            echo "⚠️ android/gradle.properties not found, skipping"
+          fi
+
+      - name: 🔥 OPTIMASI BUILD (Proguard + Shrink Resources)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo "=== Optimasi Build ==="
+          if [ -f "android/app/build.gradle" ]; then
+            sed -i '/buildTypes {/a\
+            release {\
+                minifyEnabled true\
+                shrinkResources true\
+                proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"\
+            }' android/app/build.gradle
+            echo "✅ Optimasi Gradle applied"
+          else
+            echo "⚠️ android/app/build.gradle not found, skipping"
           fi
 
       - name: Analyze Project Code
@@ -133,11 +152,15 @@ jobs:
       - name: Build APK
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
+          echo "=== Building APK ==="
+          echo "Mode: ${{ github.event.inputs.build_type }}"
           export GRADLE_OPTS="-Xmx2048m -Xms512m"
           export JAVA_OPTS="-Xmx2048m -Xms512m"
           if [ -f "pubspec.yaml" ]; then
+            echo "🔥 Project Flutter Terdeteksi!"
             flutter build apk --${{ github.event.inputs.build_type }} --split-per-abi
           else
+            echo "☕ Project Native Android Terdeteksi!"
             GRADLE_PATH=$(find . -name "gradlew" | head -n 1)
             if [ -z "$GRADLE_PATH" ]; then
               echo "❌ ERROR: File 'gradlew' tidak ditemukan!"
@@ -154,8 +177,9 @@ jobs:
             cd -
           fi
 
-      - name: Rename APK
+      - name: Rename APK (Style Panzx)
         run: |
+          echo "=== Renaming APK to flutter style ==="
           APK_FOUND=$(find $GITHUB_WORKSPACE -name "*.apk" | head -n 1)
           if [ -z "$APK_FOUND" ]; then
             echo "❌ Tidak ada APK ditemukan!"
@@ -164,7 +188,14 @@ jobs:
           APK_DIR=$(dirname "$APK_FOUND")
           RANDOM_NAME="flutter_${{ github.event.inputs.tag }}.apk"
           mv "$APK_FOUND" "$APK_DIR/$RANDOM_NAME"
+          echo "✅ APK renamed to: $RANDOM_NAME"
           echo "APK_FULL_PATH=$APK_DIR/$RANDOM_NAME" >> $GITHUB_ENV
+
+      - name: Check APK Output
+        run: |
+          echo "=== APK Output ==="
+          echo "Path: ${{ env.APK_FULL_PATH }}"
+          ls -lh "${{ env.APK_FULL_PATH }}"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
