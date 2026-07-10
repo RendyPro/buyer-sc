@@ -1,0 +1,160 @@
+name: Flutter Build APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: 'Job ID unik untuk tracking'
+        required: true
+        type: string
+      zip_path:
+        description: 'Path zip di repo (opsional)'
+        required: false
+        type: string
+      zip_url:
+        description: 'URL langsung ke file zip (opsional)'
+        required: false
+        type: string
+      build_mode:
+        description: 'Pilih mode build'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip curl wget git
+
+      - name: Setup Gradle memory
+        run: |
+          echo "org.gradle.jvmargs=-Xmx2048m -Xms512m -XX:MaxMetaspaceSize=512m" >> android/gradle.properties 2>/dev/null || true
+          echo "android.enableR8=true" >> android/gradle.properties 2>/dev/null || true
+          echo "android.enableJetifier=true" >> android/gradle.properties 2>/dev/null || true
+          echo "android.useAndroidX=true" >> android/gradle.properties 2>/dev/null || true
+
+      - name: Download project
+        id: download
+        run: |
+          if [ -n "${{ github.event.inputs.zip_path }}" ]; then
+            echo "📥 Downloading from repo path..."
+            curl -L -o project.zip "https://raw.githubusercontent.com/${{ github.repository }}/main/${{ github.event.inputs.zip_path }}"
+          elif [ -n "${{ github.event.inputs.zip_url }}" ]; then
+            echo "📥 Downloading from URL..."
+            curl -L -o project.zip "${{ github.event.inputs.zip_url }}"
+          else
+            echo "❌ No zip source provided!"
+            exit 1
+          fi
+
+          if [ ! -f "project.zip" ]; then
+            echo "❌ Gagal download file zip!"
+            exit 1
+          fi
+
+          mkdir app
+          unzip -q project.zip -d app
+
+          cd app
+          if [ ! -f "pubspec.yaml" ]; then
+            echo "🔍 Mencari pubspec.yaml di subfolder..."
+            FOUND_DIR=$(find . -name "pubspec.yaml" -exec dirname {} \; | head -1)
+            if [ -n "$FOUND_DIR" ]; then
+              echo "📁 Memindahkan dari $FOUND_DIR ke root..."
+              cp -r $FOUND_DIR/* .
+            else
+              echo "❌ pubspec.yaml tidak ditemukan!"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Project siap di build"
+          ls -la
+
+      - name: Flutter clean & pub get
+        run: |
+          cd app
+          flutter clean
+          flutter pub get
+
+      - name: Build APK
+        id: build
+        run: |
+          cd app
+          export GRADLE_OPTS="-Xmx2048m -Xms512m"
+          export JAVA_OPTS="-Xmx2048m -Xms512m"
+
+          BUILD_MODE="${{ github.event.inputs.build_mode }}"
+          echo "🔨 Mode build: $BUILD_MODE"
+
+          if [ "$BUILD_MODE" = "debug" ]; then
+            echo "🔵 Building DEBUG APK..."
+            flutter build apk --debug --split-per-abi
+          else
+            echo "🔴 Building RELEASE APK..."
+            flutter build apk --release --split-per-abi
+          fi
+
+          if [ $? -ne 0 ]; then
+            echo "❌ Build gagal!"
+            exit 1
+          fi
+
+          mkdir -p ../build_output
+
+          if [ -d "build/app/outputs/flutter-apk" ]; then
+            cp build/app/outputs/flutter-apk/*.apk ../build_output/ 2>/dev/null || true
+          fi
+
+          if [ -z "$(ls -A ../build_output/*.apk 2>/dev/null)" ]; then
+            echo "❌ Tidak ada APK yang dihasilkan!"
+            exit 1
+          fi
+
+          echo "✅ Build berhasil!"
+          ls -la ../build_output/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ github.event.inputs.job_id }}
+          path: build_output/
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Notifikasi sukses
+        if: success()
+        run: |
+          echo "✅ Build selesai untuk job ${{ github.event.inputs.job_id }}"
+          echo "📦 Artifact: apk-${{ github.event.inputs.job_id }}"
+
+      - name: Notifikasi gagal
+        if: failure()
+        run: |
+          echo "❌ Build gagal untuk job ${{ github.event.inputs.job_id }}"
+          exit 1
